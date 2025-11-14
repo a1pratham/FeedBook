@@ -1,0 +1,45 @@
+body {
+  background: #f5f7fb;
+  font-family: "Inter", sans-serif;
+}
+
+/* Card styling */
+.card {
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+/* Button */
+.btn-primary {
+  background-color: #2563eb;
+  border: none;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 8px;
+  transition: 0.2s ease;
+}
+
+.btn-primary:hover {
+  background-color: #1e40af;
+}
+
+/* Delete button */
+.btn-danger {
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+/* Page title */
+h1 {
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.list-group-item {
+  border-radius: 8px !important;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+

@@ -1,25 +1,25 @@
-const mongoose =  requier("mongoose");
+const mongoose = require("mongoose");
 
 const feedbackSchema = new mongoose.Schema({
-    name:{
-        type: String,
-        required: true,
-    },
+  name: {
+    type: String,
+    required: true,
+  },
 
-    email:{
-        type: String,
-        required: true,
-    },
+  email: {
+    type: String,
+    required: true,
+  },
 
-    message:{
-        type: String,
-        required: true,
-    },
+  message: {
+    type: String,
+    required: true,
+  },
 
-    date:{
-        type: Date,
-        defualt: Date.now,
-    },
+  date: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
-module.exports("Feedback", feedbackSchema);
+module.exports = mongoose.model("Feedback", feedbackSchema);
