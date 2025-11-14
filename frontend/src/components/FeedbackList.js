@@ -1,85 +1,50 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import axios from "axios";
-import { toast } from "react-toastify";
-import { motion } from "framer-motion";
 
-function FeedbackList() {
-  const [feedback, setFeedback] = useState([]);
-
-  useEffect(() => {
-    fetchFeedback();
-  }, []);
-
-  const fetchFeedback = async () => {
-    try {
-      const res = await axios.get("http://localhost:5000/api/feedback");
-      setFeedback(res.data.data);
-    } catch (error) {
-      console.log("Error fetching feedback:", error);
-      toast.error("Failed to fetch feedback 😢");
-    }
-  };
+function FeedbackList({ feedback, refreshList }) {
 
   const deleteFeedback = async (id) => {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this feedback?"
-    );
-
-    if (!confirmDelete) return;
+    if (!window.confirm("Are you sure you want to delete this?")) return;
 
     try {
       await axios.delete(`http://localhost:5000/api/feedback/${id}`);
-      toast.warn("Feedback deleted ❌", { autoClose: 1200 });
-      fetchFeedback(); // refresh list
+      alert("Feedback deleted");
+      refreshList(); // refresh list instantly
     } catch (error) {
-      console.log("Error deleting feedback:", error);
-      toast.error("Error deleting feedback");
+      alert("Error deleting feedback");
     }
   };
 
   return (
-    <motion.div
-      className="card p-4 shadow mt-4 mb-5"
-      initial={{ opacity: 0, y: 15 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4 }}
-    >
-      <h3 className="mb-3">All Feedback</h3>
+    <div className="card p-4 shadow-sm">
+      <h4 className="mb-3">All Feedback</h4>
 
       {feedback.length === 0 ? (
-        <p className="text-muted">No feedback submitted yet.</p>
+        <p>No feedback submitted yet.</p>
       ) : (
-        <ul className="list-group mt-3">
+        <ul className="list-group">
           {feedback.map((item) => (
-            <motion.li
+            <li
               key={item._id}
-              className="list-group-item d-flex justify-content-between align-items-start p-3 mb-2 shadow-sm"
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.3 }}
+              className="list-group-item d-flex justify-content-between align-items-start"
             >
               <div>
-                <strong>{item.name}</strong> — {item.email}
+                <strong>{item.name}</strong> – {item.email}
                 <br />
                 {item.message}
-                <br />
-                <small className="text-muted">
-                  {new Date(item.date).toLocaleString()}
-                </small>
               </div>
 
               <button
-                className="btn btn-outline-danger btn-sm"
+                className="btn btn-sm btn-danger"
                 onClick={() => deleteFeedback(item._id)}
-                style={{ borderRadius: "6px" }}
               >
-                ✖ Delete
+                Delete
               </button>
-            </motion.li>
+            </li>
           ))}
         </ul>
       )}
-    </motion.div>
+    </div>
   );
 }
 

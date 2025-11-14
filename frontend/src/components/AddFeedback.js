@@ -1,9 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { toast } from "react-toastify";
-import { motion } from "framer-motion";
 
-function AddFeedback() {
+function AddFeedback({ refreshList }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
@@ -12,64 +10,66 @@ function AddFeedback() {
     e.preventDefault();
 
     try {
-      const feedback = { name, email, message };
-      const res = await axios.post("http://localhost:5000/api/feedback", feedback);
+      await axios.post("http://localhost:5000/api/feedback", {
+        name,
+        email,
+        message,
+      });
 
-      if (res.data.success) {
-        toast.success("Feedback submitted successfully! 🎉", {
-          autoClose: 1500,
-        });
+      alert("Feedback submitted successfully!");
 
-        setName("");
-        setEmail("");
-        setMessage("");
-      }
+      setName("");
+      setEmail("");
+      setMessage("");
+
+      refreshList(); // <-- THIS IS THE MAGIC LINE 🔥🔥🔥
+
     } catch (error) {
-      toast.error("Something went wrong!");
-      console.error("Error submitting feedback:", error);
+      alert("Error submitting feedback");
     }
   };
 
   return (
-    <motion.div
-      className="card p-4 shadow mb-5"
-      initial={{ opacity: 0, y: -20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4 }}
-    >
-      <h3 className="mb-3">Add Feedback</h3>
+    <div className="card p-4 shadow-sm mb-4">
+      <h4 className="mb-3">Add Feedback</h4>
 
       <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          className="form-control mb-3 p-3 shadow-sm"
-          placeholder="Your Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-        />
+        <div className="mb-3">
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Your Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+          />
+        </div>
 
-        <input
-          type="email"
-          className="form-control mb-3 p-3 shadow-sm"
-          placeholder="Your Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
+        <div className="mb-3">
+          <input
+            type="email"
+            className="form-control"
+            placeholder="Your Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+        </div>
 
-        <textarea
-          className="form-control mb-3 p-3 shadow-sm"
-          placeholder="Your Feedback Message"
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          required
-          rows={4}
-        ></textarea>
+        <div className="mb-3">
+          <textarea
+            className="form-control"
+            placeholder="Your Feedback"
+            rows="3"
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            required
+          ></textarea>
+        </div>
 
-        <button className="btn btn-primary w-100 p-2">Submit Feedback</button>
+        <button className="btn btn-primary w-100">Submit Feedback</button>
       </form>
-    </motion.div>
+    </div>
   );
 }
 
